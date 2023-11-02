@@ -25,36 +25,26 @@ exports.checkEligibility = async (req, res) => {
 
     const pastLoansPaidOnTimeScore =
       calculatePastLoansPaidOnTimeScore(loanData);
-    console.log("pastLoansPaidOnTimeScore", pastLoansPaidOnTimeScore);
+
     credit_score += pastLoansPaidOnTimeScore;
-    console.log(credit_score);
 
     const numberOfLoansTaken = calculateNumberOfLoansTaken(
       loanData,
       customerID
     );
-    console.log("numberOfLoansTaken", numberOfLoansTaken);
+
     credit_score += numberOfLoansTaken * 10;
-    console.log(credit_score);
 
     const currentYear = new Date().getFullYear();
     const creditScoreForLoanActivityInCurrentYear =
       calculateCreditScoreForLoanActivityInCurrentYear(loanData, currentYear);
-    console.log(
-      "creditScoreForLoanActivityInCurrentYear",
-      creditScoreForLoanActivityInCurrentYear
-    );
+
     credit_score += creditScoreForLoanActivityInCurrentYear;
-    console.log(credit_score);
 
     const creditScoreForLoanApprovedVolume =
       calculateCreditScoreForLoanApprovedVolume(customerData, loanData);
-    console.log(
-      "creditScoreForLoanApprovedVolume",
-      Math.floor(creditScoreForLoanApprovedVolume)
-    );
+
     credit_score += Math.floor(creditScoreForLoanApprovedVolume);
-    console.log(credit_score);
 
     const emi = loanData.map((loan) => loan.monthly_payment);
     const request = {
@@ -68,7 +58,7 @@ exports.checkEligibility = async (req, res) => {
     };
 
     const loanApprovalResult = approveLoan(request);
-    res.json({ customer: loanApprovalResult, creditScore: credit_score });
+    res.json({ loanApprovalResult, creditScore: credit_score });
   } catch (error) {
     console.error("Error processing loan eligibility:", error);
     return res.status(500).json({ error: "Internal Server Error" });

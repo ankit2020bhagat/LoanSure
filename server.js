@@ -1,6 +1,6 @@
 const express = require("express");
 const bodyParser = require("body-parser");
-
+const apiRoutes = require("./routes/route.js");
 // create express app
 const app = express();
 
@@ -12,9 +12,9 @@ app.use(bodyParser.json());
 
 // define a simple route
 app.get("/", (req, res) => {
-  res.json({ message: "Welcome to Todo app" });
+  res.json({ message: "Welcome to Loan Sure" });
 });
-require("./route/route.js")(app);
+app.use("/", apiRoutes);
 // listen for requests
 app.listen(4000, () => {
   console.log("Server is listening on port 4000");
